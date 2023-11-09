@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class Enemy : MonoBehaviour
 {
     [Header("Atributos")]
-    public float life = 100f;
+    public float life = 40f;
     public int atack;
     public float speed;
     public float lockradius;
@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
                 if (!atacking)
                 {
                     agent.SetDestination(player.position);
-                    anim.SetBool("Slither Forward", true);
+                    anim.SetBool("Run Forward", true);
                     walking = true;
                 }
 
@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                anim.SetBool("Slither Forward", false);
+                anim.SetBool("Run Forward", false);
                 atacking = false;
                 walking = false;
                 movetowaypoint();
@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
             waitfor = true;
             atacking = true;
             walking = false;
-            anim.SetBool("Slither Forward", false);
+            anim.SetBool("Run Forward", false);
             anim.SetBool("Bite Attack", true);
             yield return new WaitForSeconds(1.2f);
             GetPlayer();
@@ -92,7 +92,7 @@ public class Enemy : MonoBehaviour
 
         if (playerdead)
         {
-            anim.SetBool("Slither Forward", false);
+            anim.SetBool("Run Forward", false);
             anim.SetBool("Bite Attack", false);
             walking = false;
             atacking = false;
@@ -125,13 +125,15 @@ public class Enemy : MonoBehaviour
         else
         {
             anim.SetTrigger("Die");
+            Destroy(gameObject,1.5f);
+            
         }
     }
 
     IEnumerator recovery()
     {
         yield return new WaitForSeconds(1f);
-        anim.SetBool("Slither Forward", false);
+        anim.SetBool("Run Forward", false);
         anim.SetBool("Bite Attack", false);
         hitting = false;
         waitfor = false;
@@ -149,7 +151,7 @@ public class Enemy : MonoBehaviour
                 currentpatch = Random.Range(0, points.Count);
                 
             }
-            anim.SetBool("Slither Forward", true);
+            anim.SetBool("Run Forward", true);
             walking = true;
         }
     }

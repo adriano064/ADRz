@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class Player : MonoBehaviour
 {
@@ -17,7 +19,11 @@ public class Player : MonoBehaviour
     [Header("Int`s")]
     public int dano = 15;
     public int life;
-    
+    public Text textvida;
+    public AudioSource andando;
+    public AudioSource ata;
+    public AudioSource F;
+    public AudioSource game;
     [Header("Bool`s")]
     public bool iswalking;
     public bool waitfor;
@@ -38,6 +44,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         Controler = GetComponent<CharacterController>();
         cam = Camera.main.transform;
+        textvida.text = "x " + life.ToString();
     }
     
     
@@ -61,6 +68,7 @@ public class Player : MonoBehaviour
         if (life <= 0)
         {
             Destroy(gameObject.GetComponent<CharacterController>());
+            
         }
     }
 
@@ -75,6 +83,10 @@ public class Player : MonoBehaviour
 
             if (direction.magnitude > 0)
             {
+                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.W))
+                {
+                    andando.Play();
+                }
 
                 if (!anim.GetBool("Atack"))
                 {
@@ -103,6 +115,7 @@ public class Player : MonoBehaviour
                 moveDirection = Vector3.zero;
                 anim.SetInteger("Transition", 0);
                 iswalking = false;
+                andando.Stop();
             }
             
         }
@@ -136,11 +149,12 @@ public class Player : MonoBehaviour
     {
         if (!waitfor && !ishiting)
         {
+            
             waitfor = true;
             anim.SetBool("Atack", true);
             anim.SetInteger("Transition", 1);
             yield return new WaitForSeconds(0.52f);
-
+            ata.Play();
             GetEnemy();
 
             foreach (Transform enemys in enemylist)
@@ -181,8 +195,10 @@ public class Player : MonoBehaviour
     public void getHit(int dmg)
     {
         life -= dmg;
+        textvida.text = "x " + life.ToString();
         if (life > 0)
         {
+            F.Play();
             StopCoroutine("Matack");
             anim.SetInteger("Transition", 3);
             ishiting = true;
@@ -190,6 +206,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            game.Play();
             isdead = true;
             anim.SetTrigger("dead");
         }
