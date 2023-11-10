@@ -8,6 +8,7 @@ public class gamercontroler : MonoBehaviour
     
     public Text coinText;
     private int coinCount = 0;
+   
 
     void Start()
     {
